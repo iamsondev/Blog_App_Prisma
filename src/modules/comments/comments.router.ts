@@ -8,4 +8,6 @@ router.post(
   auth(useRole.USER, useRole.ADMIN),
   commentController.createComment
 );
+
+router.get("/:commentId", commentController.getCommentById);
 export const commentRouter = router;
