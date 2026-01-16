@@ -10,7 +10,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.API_URL || "http://localhost:4000",
-    Credential: true,
+    credentials: true,
   })
 );
 

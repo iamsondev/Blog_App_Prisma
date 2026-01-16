@@ -5,6 +5,11 @@ const router = express.Router();
 
 router.post("/", auth(useRole.USER), postController.createPost);
 router.get("/", postController.getAllPost);
+router.get(
+  "/my-posts",
+  auth(useRole.USER, useRole.ADMIN),
+  postController.getMyPost
+);
 router.get("/:postId", postController.getPostById);
 
 export const postRouter = router;

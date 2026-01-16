@@ -162,8 +162,35 @@ const getPostById = async (postId: string) => {
   });
 };
 
+const getMyPost = async (authorId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: authorId,
+      status: "Active",
+    },
+  });
+  if (!user) {
+    throw new Error("you are not authorized");
+  }
+  const result = await prisma.post.findMany({
+    where: {
+      authorId,
+    },
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+
 export const postService = {
   createPost,
   getAllPost,
   getPostById,
+  getMyPost,
 };
