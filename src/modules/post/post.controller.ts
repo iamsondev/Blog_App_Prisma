@@ -119,6 +119,28 @@ const updatePost = async (req: Request, res: Response) => {
     });
   }
 };
+const deletePost = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    console.log(user);
+    if (!user) {
+      throw new Error("you are unauthorized");
+    }
+    const { postId } = req.params;
+    const isAdmin = user.role === useRole.ADMIN;
+    const result = await postService.deletePost(
+      postId as string,
+      user.id,
+      isAdmin
+    );
+    res.status(200).json({ result });
+  } catch (e) {
+    res.status(400).json({
+      error: "you are not owner of this post",
+      details: e,
+    });
+  }
+};
 
 export const postController = {
   createPost,
@@ -126,4 +148,5 @@ export const postController = {
   getPostById,
   getMyPost,
   updatePost,
+  deletePost,
 };
