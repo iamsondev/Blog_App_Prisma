@@ -109,7 +109,7 @@ const updatePost = async (req: Request, res: Response) => {
       postId as string,
       req.body,
       user.id,
-      isAdmin
+      isAdmin,
     );
     res.status(200).json({ result });
   } catch (e) {
@@ -131,12 +131,23 @@ const deletePost = async (req: Request, res: Response) => {
     const result = await postService.deletePost(
       postId as string,
       user.id,
-      isAdmin
+      isAdmin,
     );
     res.status(200).json({ result });
   } catch (e) {
     res.status(400).json({
       error: "you are not owner of this post",
+      details: e,
+    });
+  }
+};
+const getStats = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.getStats();
+    res.status(200).json({ result });
+  } catch (e) {
+    res.status(400).json({
+      error: "unable to get statistics",
       details: e,
     });
   }
@@ -149,4 +160,5 @@ export const postController = {
   getMyPost,
   updatePost,
   deletePost,
+  getStats,
 };
