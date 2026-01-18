@@ -20,6 +20,17 @@ function errorHandler(
         (errorMessage =
           "An operation failed because it depends on one or more records that were required but not found"));
     }
+  } else if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+    ((statusCode = 500), (errorMessage = "Error occurred during execution"));
+  } else if (err instanceof Prisma.PrismaClientInitializationError) {
+    if (err.errorCode === "p1000") {
+      ((statusCode = 400),
+        (errorMessage =
+          "Authentication failed!! please check your credential"));
+    }
+    if (err.errorCode === "p1001") {
+      ((statusCode = 400), (errorMessage = "Can't reach database server"));
+    }
   }
   res.status(statusCode);
   res.json({
