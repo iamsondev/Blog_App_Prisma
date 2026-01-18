@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Prisma } from "../../generated/prisma/client";
 
 function errorHandler(
   err: any,
@@ -6,10 +7,18 @@ function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
-  res.status(500);
+  let statusCode = 500;
+  let errorMessage = "Internal Server Error";
+  let errDetails = err;
+
+  if (err instanceof Prisma.PrismaClientValidationError) {
+    ((statusCode = 400),
+      (errorMessage = "You provided incorrect field type or errorMessage"));
+  }
+  res.status(statusCode);
   res.json({
-    message: "error from errorHandler",
-    error: err,
+    message: errorMessage,
+    error: errDetails,
   });
 }
 
