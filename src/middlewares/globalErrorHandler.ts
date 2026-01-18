@@ -14,6 +14,12 @@ function errorHandler(
   if (err instanceof Prisma.PrismaClientValidationError) {
     ((statusCode = 400),
       (errorMessage = "You provided incorrect field type or errorMessage"));
+  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2025") {
+      ((statusCode = 400),
+        (errorMessage =
+          "An operation failed because it depends on one or more records that were required but not found"));
+    }
   }
   res.status(statusCode);
   res.json({

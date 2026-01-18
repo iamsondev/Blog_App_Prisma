@@ -3,7 +3,7 @@ import { postController } from "./post.controller";
 import auth, { useRole } from "../../middlewares/auth";
 const router = express.Router();
 
-router.post("/", auth(useRole.USER), postController.createPost);
+router.post("/", auth(useRole.USER, useRole.ADMIN), postController.createPost);
 router.get(
   "/stats",
   auth(useRole.ADMIN, useRole.USER),
